@@ -17,6 +17,9 @@ app = FastAPI(
     version="0.1.0"
 )
 
+# Serve static HTML from /static
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
+
 # ------------------------------
 # Request body schema
 # ------------------------------
