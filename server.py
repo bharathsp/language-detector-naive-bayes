@@ -35,5 +35,9 @@ def home():
 @app.post("/predict")
 def predict_language(input: TextInput):
     """Predict the language of given text."""
-    prediction = model.predict([input.text])[0]
-    return {"text": input.text, "predicted_language": int(prediction)}
+    pred_encoded = model.predict([input.text])[0]
+    pred_label = label_encoder.inverse_transform([pred_encoded])[0]  # decode back
+    return {
+        "text": input.text,
+        "predicted_language": pred_label
+    }
