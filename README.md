@@ -113,3 +113,14 @@ English [0]
 * Add support for more languages 🌐
 * Experiment with **Deep Learning models (LSTMs, Transformers)**
 * Deploy as a **REST API / Streamlit app**
+
+docker build -t language-detection-api .
+<img width="888" height="217" alt="image" src="https://github.com/user-attachments/assets/99aec8da-5d18-4704-9af9-9c69b7d6b327" />
+
+<img width="565" height="488" alt="image" src="https://github.com/user-attachments/assets/1de25c25-d125-47f5-a1a6-e45807e43572" />
+
+<img width="119" height="63" alt="image" src="https://github.com/user-attachments/assets/c232f9b4-86fd-435d-b5cb-867438013d61" />
+
+<img width="655" height="752" alt="image" src="https://github.com/user-attachments/assets/a1810fe9-650c-427b-9685-cb39e7d3540b" />
+
+docker run -d -p 8000:8000 language-detection-api
