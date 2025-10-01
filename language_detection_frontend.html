@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Language Detect • Demo</title>
+  <style>
+    :root{
+      --bg1:#0f172a; /* deep navy */
+      --bg2:#0ea5a1; /* teal */
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.03);
+      --accent: #7c3aed;
+      --muted: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(14,165,161,0.08), transparent),
+                  linear-gradient(135deg,var(--bg1), #071021 80%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px;
+    }
+    .container{
+      width:100%;
+      max-width:980px;
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+    }
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:14px;
+      padding:28px;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    h1{margin:0 0 8px 0; font-size:22px}
+    p.lead{margin:0 0 18px 0; color:var(--muted)}
+
+    textarea.input{
+      width:100%;
+      min-height:220px;
+      max-height:420px;
+      resize:vertical;
+      padding:16px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      color:inherit;
+      font-size:15px;
+      line-height:1.5;
+      outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    .controls{
+      margin-top:14px; display:flex; gap:10px; align-items:center;
+    }
+    .btn{
+      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; border:none;
+      background:linear-gradient(90deg,var(--accent), #06b6d4);
+      color:white; box-shadow: 0 8px 20px rgba(12,20,40,0.6);
+    }
+    .btn.secondary{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:600 }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border-radius:14px; padding:20px; height:100%;
+      border:1px solid rgba(255,255,255,0.03);
+      display:flex; flex-direction:column; gap:14px;
+    }
+    .card-title{font-size:14px; margin:0}
+    .result{
+      margin-top:6px; padding:14px; border-radius:10px; background:var(--glass); border:1px solid rgba(255,255,255,0.02);
+      min-height:72px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px;
+    }
+
+    .meta{color:var(--muted); font-size:13px}
+    .small{font-size:13px; color:var(--muted)}
+
+    .footer{margin-top:auto; display:flex; gap:8px; align-items:center; justify-content:space-between}
+
+    .loader{width:18px; height:18px; border-radius:50%; border:3px solid rgba(255,255,255,0.08); border-top-color: white; animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr;}
+      .panel{order:-1}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero" aria-labelledby="title">
+      <h1 id="title">Language Detection — Demo</h1>
+      <p class="lead">Paste any text below and click <strong>Detect</strong>. This demo calls your FastAPI <code>/predict</code> endpoint and shows the detected language.</p>
+
+      <textarea id="inputText" class="input" placeholder="Enter text in any language — e.g. 'Bonjour, comment ça va ?' or 'नमस्ते'" spellcheck="true"></textarea>
+
+      <div class="controls">
+        <button id="detectBtn" class="btn">Detect language</button>
+        <button id="clearBtn" class="btn secondary">Clear</button>
+        <div id="status" style="margin-left:auto;display:flex;align-items:center;gap:8px"></div>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+        <div class="small">Model: <strong>MultinomialNB + TF-IDF</strong></div>
+        <div class="small">Server: <strong>/predict</strong></div>
+        <div class="small">Tip: Enable CORS in your FastAPI (or host frontend together).</div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div>
+        <div class="card-title">Detected language</div>
+        <div id="result" class="result">—</div>
+      </div>
+
+      <div>
+        <div class="card-title">Raw API response</div>
+        <pre id="raw" style="white-space:pre-wrap;word-break:break-word;background:transparent;border-radius:8px;padding:10px;margin:8px 0;color:var(--muted)">—</pre>
+      </div>
+
+      <div class="footer">
+        <div class="meta">Ready</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a href="#" id="openDocs" class="small">Open API docs</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Configuration
+    const PREDICT_URL = '/predict'; // change to full URL if API is hosted elsewhere
+
+    const inputEl = document.getElementById('inputText');
+    const detectBtn = document.getElementById('detectBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultEl = document.getElementById('result');
+    const rawEl = document.getElementById('raw');
+    const statusEl = document.getElementById('status');
+    const openDocs = document.getElementById('openDocs');
+
+    openDocs.addEventListener('click', (e)=>{ e.preventDefault(); window.open('/docs','_blank') });
+
+    function setLoading(loading){
+      statusEl.innerHTML = loading ? '<div class="loader" aria-hidden="true"></div>' : '<div class="meta">Ready</div>';
+      detectBtn.disabled = loading;
+      clearBtn.disabled = loading;
+    }
+
+    async function detect(){
+      const text = inputEl.value.trim();
+      if(!text){ resultEl.textContent = 'Please enter some text.'; return; }
+
+      setLoading(true);
+      resultEl.textContent = 'Detecting...';
+      rawEl.textContent = '';
+
+      try{
+        const resp = await fetch(PREDICT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        if(!resp.ok){
+          const textResp = await resp.text();
+          throw new Error('Server error: ' + resp.status + ' — ' + textResp);
+        }
+
+        const data = await resp.json();
+
+        // Expecting { text:..., predicted_language: 'English' }
+        const lang = data.predicted_language ?? data.predicted_label ?? 'Unknown';
+        resultEl.textContent = String(lang);
+        rawEl.textContent = JSON.stringify(data, null, 2);
+      }catch(err){
+        resultEl.textContent = 'Error — see details';
+        rawEl.textContent = err.stack || err.message || String(err);
+      }finally{
+        setLoading(false);
+      }
+    }
+
+    detectBtn.addEventListener('click', detect);
+    clearBtn.addEventListener('click', ()=>{ inputEl.value=''; resultEl.textContent='—'; rawEl.textContent='—' });
+
+    // submit on ctrl+enter
+    inputEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' && (e.ctrlKey||e.metaKey)) detect(); });
+  </script>
+</body>
+</html>
