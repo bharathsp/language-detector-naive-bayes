@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import joblib
 
@@ -29,9 +30,9 @@ class TextInput(BaseModel):
 # ------------------------------
 # Root endpoint
 # ------------------------------
-@app.get("/")
-def home():
-    return {"message": "Welcome to the Language Detection API 🚀"}
+# @app.get("/")
+# def home():
+#     return {"message": "Welcome to the Language Detection API 🚀"}
 
 # ------------------------------
 # Prediction endpoint
