@@ -3,9 +3,10 @@ from pydantic import BaseModel
 import joblib
 
 # ------------------------------
-# Load trained pipeline
+# Load trained pipeline and label encoder
 # ------------------------------
 model = joblib.load("trained_pipeline-0.1.0.joblib")
+label_encoder = joblib.load("label_encoder.joblib")  # load stored encoder
 
 # ------------------------------
 # Define FastAPI app
