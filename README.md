@@ -8,6 +8,7 @@ This project implements a **Language Detection Model** using the **Multinomial N
 It classifies text into its respective language by applying **text preprocessing, feature engineering, hyperparameter tuning (GridSearchCV), and model validation**.  
 
 The final model is packaged into a **pipeline** and saved with **Pickle** for deployment.
+The pipeline is then serialized into a joblib file. create api endpoints using fast api. Develop interactive webpage using html and css. Deploy locally into docker and test the application. Post local testing deploy the application into Azure app services.
 
 ---
 
@@ -80,6 +81,59 @@ print(le.classes_[y[0]], y)
 English [0]
 ```
 
+## Serialize the final language detector model and label encoder into joblib file
+*languageDetector.py*
+Save trained pipeline using joblib - *trained_pipeline-0.1.0.joblib*
+Save label encoder separately - *label_encoder.joblib*
+
+<img width="403" height="348" alt="image" src="https://github.com/user-attachments/assets/80e94220-af8e-4428-a058-f2d76ed3866f" />
+
+## API endpoints created using FastAPI
+*server.py*
+Root endpoint - static/language_detection_frontend.html
+Prediction endpoint - Returns "predicted_language"
+
+<img width="699" height="886" alt="image" src="https://github.com/user-attachments/assets/d80d07c3-8fe7-4650-909d-4b971356a435" />
+
+## HTML file with CSS
+language_detection_frontend.html is created inside static folder
+
+## Create a Dockerfile
+Use official lightweight Python image
+Set working directory
+Install system dependencies (optional: for pandas/numpy performance)
+Copy requirements first
+Install dependencies
+Copy application files
+Copy static files
+Expose FastAPI default port
+Run the app with uvicorn
+
+<img width="586" height="545" alt="image" src="https://github.com/user-attachments/assets/f734b53b-5564-4edc-9611-0a33357bf3a2" />
+
+## Deploy to docker on local
+
+docker build -t language-detection-api .
+
+<img width="888" height="217" alt="image" src="https://github.com/user-attachments/assets/99aec8da-5d18-4704-9af9-9c69b7d6b327" />
+
+docker run -d -p 8000:8000 language-detection-api
+
+<img width="774" height="39" alt="image" src="https://github.com/user-attachments/assets/72df21eb-4915-4766-bb98-c29defc33c0d" />
+
+## Test the app on local
+
+outputs - http://localhost:8000/
+
+<img width="1079" height="600" alt="image" src="https://github.com/user-attachments/assets/96e6d919-f7f4-469d-875e-000af93e75d0" />
+
+<img width="1057" height="562" alt="image" src="https://github.com/user-attachments/assets/661caf4b-860c-4b55-947e-c2cb39f4a7a8" />
+
+## Deploy the application into Azure app services
+
+## Test the app on cloud
+Check if the app is accessible anywhere using the endpoints
+
 ---
 
 ## 📊 Tech Stack
@@ -90,6 +144,13 @@ English [0]
 * 📊 Matplotlib, Seaborn
 * 🛠️ Regex
 * 🗄️ Pickle
+* joblib
+* docker
+* Azure
+* fast api
+* uvicorn
+* html
+* css
 
 ---
 
@@ -113,14 +174,3 @@ English [0]
 * Add support for more languages 🌐
 * Experiment with **Deep Learning models (LSTMs, Transformers)**
 * Deploy as a **REST API / Streamlit app**
-
-docker build -t language-detection-api .
-<img width="888" height="217" alt="image" src="https://github.com/user-attachments/assets/99aec8da-5d18-4704-9af9-9c69b7d6b327" />
-
-<img width="565" height="488" alt="image" src="https://github.com/user-attachments/assets/1de25c25-d125-47f5-a1a6-e45807e43572" />
-
-<img width="119" height="63" alt="image" src="https://github.com/user-attachments/assets/c232f9b4-86fd-435d-b5cb-867438013d61" />
-
-<img width="655" height="752" alt="image" src="https://github.com/user-attachments/assets/a1810fe9-650c-427b-9685-cb39e7d3540b" />
-
-docker run -d -p 8000:8000 language-detection-api
