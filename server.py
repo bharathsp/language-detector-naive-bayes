@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-# from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 from fastapi.responses import FileResponse
@@ -20,15 +19,6 @@ app = FastAPI(
     version="0.1.0"
 )
 
-# ✅ Add CORS middleware here
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],   # In production, replace with your frontend domain
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
 # Serve static files under /static
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -43,9 +33,7 @@ class TextInput(BaseModel):
 # ------------------------------
 @app.get("/")
 def read_root():
-    return FileResponse("static/index.html")
-# def home():
-#     return {"message": "Welcome to the Language Detection API 🚀"}
+    return FileResponse("static/language_detection_frontend.html")
 
 # ------------------------------
 # Prediction endpoint

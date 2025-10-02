@@ -72,4 +72,4 @@ joblib.dump(pipe, 'trained_pipeline-0.1.0.joblib')
 # Save label encoder separately
 joblib.dump(le, "label_encoder.joblib")
 
-print("Model trained and saved as trained_pipeline-0.1.0.joblib")
+print("Model trained and saved as trained_pipeline-0.1.0.joblib & label_encoder.joblib")

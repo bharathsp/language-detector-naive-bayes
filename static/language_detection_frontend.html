@@ -102,7 +102,7 @@
   <div class="container">
     <section class="hero" aria-labelledby="title">
       <h1 id="title">Language Detection — Demo</h1>
-      <p class="lead">Paste any text below and click <strong>Detect</strong>. This demo calls your FastAPI <code>/predict</code> endpoint and shows the detected language.</p>
+      <p class="lead">Paste any text below and click <strong>Detect</strong>. The model can identify 20+ languages including English, Spanish, French, German, Chinese, Hindi, Arabic, and more.</p>
 
       <textarea id="inputText" class="input" placeholder="Enter text in any language — e.g. 'Bonjour, comment ça va ?' or 'नमस्ते'" spellcheck="true"></textarea>
 
@@ -115,7 +115,6 @@
       <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
         <div class="small">Model: <strong>MultinomialNB + TF-IDF</strong></div>
         <div class="small">Server: <strong>/predict</strong></div>
-        <div class="small">Tip: Enable CORS in your FastAPI (or host frontend together).</div>
       </div>
     </section>
 
