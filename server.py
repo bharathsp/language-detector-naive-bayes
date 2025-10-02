@@ -1,8 +1,9 @@
 from fastapi import FastAPI
-# from fastapi.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles
 # from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
+from fastapi.responses import FileResponse
 
 # ------------------------------
 # Load trained pipeline and label encoder
@@ -28,8 +29,8 @@ app = FastAPI(
 #     allow_headers=["*"],
 # )
 
-# Serve static HTML from /static
-# app.mount("/", StaticFiles(directory="static", html=True), name="static")
+# Serve static files under /static
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ------------------------------
 # Request body schema
@@ -40,7 +41,9 @@ class TextInput(BaseModel):
 # ------------------------------
 # Root endpoint
 # ------------------------------
-# @app.get("/")
+@app.get("/")
+def read_root():
+    return FileResponse("static/index.html")
 # def home():
 #     return {"message": "Welcome to the Language Detection API 🚀"}
 
@@ -56,3 +59,6 @@ def predict_language(input: TextInput):
         "text": input.text,
         "predicted_language": pred_label
     }
+
+# Serve static HTML from /static
+app.mount("/", StaticFiles(directory="static", html=True), name="static")
