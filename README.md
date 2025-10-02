@@ -117,9 +117,13 @@ docker build -t language-detection-api .
 
 <img width="888" height="217" alt="image" src="https://github.com/user-attachments/assets/99aec8da-5d18-4704-9af9-9c69b7d6b327" />
 
+<img width="1638" height="301" alt="image" src="https://github.com/user-attachments/assets/93e8152d-c063-4bf4-ab95-b8199211fea1" />
+
 docker run -d -p 8000:8000 language-detection-api
 
 <img width="774" height="39" alt="image" src="https://github.com/user-attachments/assets/72df21eb-4915-4766-bb98-c29defc33c0d" />
+
+<img width="1627" height="312" alt="image" src="https://github.com/user-attachments/assets/e99583bb-89ed-4f24-9d8c-2fd7f3adc4a6" />
 
 ## Test the app on local
 
@@ -129,10 +133,117 @@ outputs - http://localhost:8000/
 
 <img width="1057" height="562" alt="image" src="https://github.com/user-attachments/assets/661caf4b-860c-4b55-947e-c2cb39f4a7a8" />
 
+## Push image to docker hub
+Azure App Service needs to pull your image from a container registry. You can use:
+Azure Container Registry (ACR) (recommended)
+Or Docker Hub
+
+Tag the local image
+docker tag language-detection-app:latest bharath0805/language-detection-app:latest
+
+Push it to Docker Hub
+docker push bharath0805/language-detection-app:latest
+
+<img width="1055" height="241" alt="image" src="https://github.com/user-attachments/assets/1a0a4556-d294-4a29-a1e6-e74b3c4ccc41" />
+
+Verify on Docker Hub
+
+Go to hub.docker.com
+ → login → check under your account bharath0805.
+
+You should see the repository language-detection-app.
+
+<img width="1893" height="443" alt="image" src="https://github.com/user-attachments/assets/dfc1e848-9bdb-4e17-9ee5-ede8cba61845" />
+
+On Docker Desktop
+
+<img width="1914" height="406" alt="image" src="https://github.com/user-attachments/assets/ba8e26d1-1c99-463b-97f2-536ef1cec0dd" />
+
 ## Deploy the application into Azure app services
+Step 2: Create a Web App for Containers
+
+Go to Azure Portal
+.
+
+Search for App Services → Create → Web App.
+
+Fill the basics:
+
+Subscription → your subscription
+
+Resource Group → create or select existing
+
+Name → e.g., language-detect-api (this becomes part of the URL: https://language-detect-api.azurewebsites.net)
+
+Publish → Docker Container
+
+Operating System → Linux
+
+Region → pick nearest (India → Central India, South India, etc.)
+
+<img width="718" height="894" alt="image" src="https://github.com/user-attachments/assets/23dc64d7-9578-47f3-9724-8139e79f5f92" />
+
+🐳 Configure Docker Hub Container Settings
+
+Image Source → ✅ Other container registries
+(this is used for Docker Hub when you aren’t using ACR)
+
+Name → this is just the App Service name you gave earlier (e.g. main).
+
+Docker Hub Options →
+
+Access Type: Public (since your repo is public)
+
+If private → enter Docker Hub username + access token.
+
+Registry server URL → leave as:
+
+https://index.docker.io
+
+
+Image and Tag → put your Docker Hub repo + tag:
+
+bharath0805/language-detection-app:latest
+
+
+Port → set to 8000 🚨 (important — your uvicorn app runs on port 8000 inside the container, not 80).
+Azure will route external port 80 → internal port 8000.
+
+Startup Command → leave blank (FastAPI is already started via CMD ["uvicorn", ...] in your Dockerfile).
+
+<img width="690" height="643" alt="image" src="https://github.com/user-attachments/assets/e2e0a54b-5373-4e25-8e73-800b1b9e0199" />
+
+Review + Create
+
+<img width="630" height="804" alt="image" src="https://github.com/user-attachments/assets/3e97631b-8e60-4c17-822c-9b9b073d0c94" />
+
+<img width="1201" height="435" alt="image" src="https://github.com/user-attachments/assets/3ec50caa-627d-4c75-bff6-0848beba3efe" />
 
 ## Test the app on cloud
+
+<img width="850" height="249" alt="image" src="https://github.com/user-attachments/assets/10641f6e-659e-4040-98e5-5db5d3cb74f6" />
+
+Test Your App
+Go to your App Service → Overview → Copy the Default Domain (e.g. [https://language-detect-api.azurewebsites.net/](https://language-detect-api-gde0d4a3a0cyeyae.centralus-01.azurewebsites.net/)).
+Test endpoints:
+https://<yourapp>.azurewebsites.net/ → should load your index.html.
+https://<yourapp>.azurewebsites.net/predict → test POST with JSON:
 Check if the app is accessible anywhere using the endpoints
+
+<img width="1609" height="792" alt="image" src="https://github.com/user-attachments/assets/8cbb158f-8d09-408f-a356-639283ad9cbd" />
+
+![WhatsApp Image 2025-10-02 at 07 24 42_68575ed3](https://github.com/user-attachments/assets/bf867e02-9fc5-4a36-a64e-d26076a73de5)
+
+## Continuous Deployment
+
+(Optional) Enable Continuous Deployment
+If you want auto-deploy when you push to Docker Hub:
+Go to your App Service in Azure.
+In the left menu → Deployment Center.
+Choose Source: Docker Hub.
+Authenticate with your Docker Hub account.
+Select your repo (bharath0805/language-detection-app) and branch/tag.
+👉 Now, every time you docker push a new image, Azure will auto-update the running container. 🚀
 
 ---
 
