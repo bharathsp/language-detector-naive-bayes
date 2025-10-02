@@ -10,6 +10,8 @@ It classifies text into its respective language by applying **text preprocessing
 The final model is packaged into a **pipeline** and saved with **Pickle** and **joblib** for deployment.
 An **API** is built using **FastAPI**, served via a **Docker container**, and deployed on **Azure App Services**.
 
+<img width="955" height="265" alt="Flowchart2" src="https://github.com/user-attachments/assets/593cdccb-69e9-403d-a6a2-498590c6e06b" />
+
 ---
 
 ## 📂 Dataset  
