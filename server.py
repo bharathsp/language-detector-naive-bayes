@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 
@@ -20,16 +20,16 @@ app = FastAPI(
 )
 
 # ✅ Add CORS middleware here
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],   # In production, replace with your frontend domain
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],   # In production, replace with your frontend domain
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 # Serve static HTML from /static
-app.mount("/", StaticFiles(directory="static", html=True), name="static")
+# app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
 # ------------------------------
 # Request body schema
